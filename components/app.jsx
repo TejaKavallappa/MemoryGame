@@ -8,7 +8,7 @@ export default class App extends React.Component {
     return(
       <div>
         <NavBar />
-        <Game />
+        <Game level={1} />
       </div>
     )
   }

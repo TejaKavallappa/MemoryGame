@@ -1,6 +1,11 @@
 body {
   font: 100% Helvetica, sans-serif; }
 
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
 .board {
   height: 100%;
   width: 50%;
@@ -9,7 +14,14 @@ body {
   align-items: stretch;
   flex-wrap: wrap;
   background-color: gainsboro;
-  margin: 0 auto; }
+  margin: 0 auto;
+  border-radius: 5px; }
+
+.dashboard {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  padding: 20px; }
 
 li {
   list-style: none; }
@@ -17,7 +29,9 @@ li {
 .tile-div {
   height: 200px;
   width: 200px;
-  margin: 10px; }
+  border-radius: 10px;
+  margin: 10px;
+  transition: transform 20ms; }
 
 .yellow {
   background-color: #f5bb00; }
@@ -32,6 +46,6 @@ li {
   background-color: #bf3100; }
 
 .ON {
-  background-color: darkseagreen; }
+  transform: translate(-10px, -15px); }
 
 /*# sourceMappingURL=style.css.map */

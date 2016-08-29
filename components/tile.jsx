@@ -5,27 +5,29 @@ var classNames = require('classnames');
 export default class Tile extends React.Component {
   constructor(props){
     super(props);
-    this.handleClick = this.handleClick.bind(this);
+    this.state = ({toggle: props.onoff})
     this.toggle = this.toggle.bind(this);
   }
 
-  handleClick(e){
-    this.props.updateGame(this.props.keys);
+  componentWillReceiveProps(newProps){
+    this.setState({toggle: newProps.onoff});
   }
 
-  toggle(){
-    let toggle = this.props.onoff;
+  toggle(e){
+    let toggle = this.state.toggle;
     toggle = toggle == "ON" ? "OFF" : "ON";
-    console.log("toggle!");
+    if (this.state.toggle === "OFF"){
+      this.props.updateGame(this.props.keys);
+    }
+    this.setState({toggle: toggle});
   }
 
   render(){
-    var tileClass = this.props.onoff;
-    tileClass += " " + this.props.color;
+    var tileClass = this.props.color;
     tileClass += " tile-div"
+    tileClass += " " + this.state.toggle;
     return (
       <div className={tileClass}
-        onClick={this.handleClick}
         onMouseDown={this.toggle}
         onMouseUp={this.toggle}>
       </div>

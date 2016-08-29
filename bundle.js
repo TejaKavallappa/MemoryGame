@@ -21463,7 +21463,7 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_nav_bar2.default, null),
-	        _react2.default.createElement(_game2.default, null)
+	        _react2.default.createElement(_game2.default, { level: 1 })
 	      );
 	    }
 	  }]);
@@ -21554,6 +21554,10 @@
 	
 	var _board2 = _interopRequireDefault(_board);
 	
+	var _level = __webpack_require__(179);
+	
+	var _level2 = _interopRequireDefault(_level);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -21572,8 +21576,8 @@
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Game).call(this, props));
 	
-	    var memory = new Memory.MemoryGame(4);
-	    _this.state = { blinkSequence: [], memory: memory };
+	    var memory = new Memory.MemoryGame(_this.props.level);
+	    _this.state = { blinkSequence: [], memory: memory, level: _this.props.level };
 	    _this.startGame = _this.startGame.bind(_this);
 	    _this.updateGame = _this.updateGame.bind(_this);
 	    return _this;
@@ -21588,21 +21592,29 @@
 	  }, {
 	    key: 'updateGame',
 	    value: function updateGame(tile) {
-	      this.state.memory.updateUserarray(tile);
+	      var result = this.state.memory.setGuess(tile);
+	      if (result !== -1) {
+	        this.setState({ blinkSequence: [], level: this.state.memory.level });
+	      }
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'game' },
 	        _react2.default.createElement(_board2.default, {
 	          board: this.state.blinkSequence,
 	          updateGame: this.updateGame }),
 	        _react2.default.createElement(
-	          'button',
-	          { onClick: this.startGame },
-	          'Start'
+	          'div',
+	          { className: 'dashboard' },
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.startGame },
+	            'Start'
+	          ),
+	          _react2.default.createElement(_level2.default, { level: this.state.memory.level })
 	        )
 	      );
 	    }
@@ -21649,31 +21661,33 @@
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, props));
 	
-	    _this.handleClick = _this.handleClick.bind(_this);
+	    _this.state = { toggle: props.onoff };
 	    _this.toggle = _this.toggle.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(Tile, [{
-	    key: 'handleClick',
-	    value: function handleClick(e) {
-	      this.props.updateGame(this.props.keys);
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(newProps) {
+	      this.setState({ toggle: newProps.onoff });
 	    }
 	  }, {
 	    key: 'toggle',
-	    value: function toggle() {
-	      var toggle = this.props.onoff;
+	    value: function toggle(e) {
+	      var toggle = this.state.toggle;
 	      toggle = toggle == "ON" ? "OFF" : "ON";
-	      console.log("toggle!");
+	      if (this.state.toggle === "OFF") {
+	        this.props.updateGame(this.props.keys);
+	      }
+	      this.setState({ toggle: toggle });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var tileClass = this.props.onoff;
-	      tileClass += " " + this.props.color;
+	      var tileClass = this.props.color;
 	      tileClass += " tile-div";
+	      tileClass += " " + this.state.toggle;
 	      return _react2.default.createElement('div', { className: tileClass,
-	        onClick: this.handleClick,
 	        onMouseDown: this.toggle,
 	        onMouseUp: this.toggle });
 	    }
@@ -21704,6 +21718,7 @@
 	    _classCallCheck(this, MemoryGame);
 	
 	    this.level = level;
+	    this.tiles = 4;
 	    this.userArray = [];
 	    this.blinkArray = [];
 	  }
@@ -21713,14 +21728,35 @@
 	    value: function generateSequence() {
 	      this.blinkArray = [];
 	      for (var i = 0; i < this.level; i++) {
-	        var num = Math.floor(Math.random() * this.level);
+	        var num = Math.floor(Math.random() * this.tiles);
 	        while (i > 0 && num == this.blinkArray[i - 1]) {
-	          num = Math.floor(Math.random() * this.level);
+	          num = Math.floor(Math.random() * this.tiles);
 	        }
 	        this.blinkArray.push(num);
 	      }
-	
 	      return this.blinkArray;
+	    }
+	  }, {
+	    key: "setGuess",
+	    value: function setGuess(guess) {
+	      this.updateUserarray(guess);
+	      if (this.userArray.length === this.blinkArray.length && this.blinkArray.length !== 0) {
+	        return this.hasWon();
+	      }
+	      return -1;
+	    }
+	  }, {
+	    key: "hasWon",
+	    value: function hasWon() {
+	      var res = this.compare(this.userArray);
+	      if (res) {
+	        this.level += 1;
+	      } else {
+	        this.level = 1;
+	      }
+	      this.blinkArray = [];
+	      this.userArray = [];
+	      return res;
 	    }
 	  }, {
 	    key: "updateUserarray",
@@ -21729,15 +21765,6 @@
 	        return;
 	      }
 	      this.userArray.push(guess);
-	      if (this.userArray.length === this.blinkArray.length) {
-	        var res = this.compare(this.userArray);
-	        if (res) {
-	          console.log("You win!");
-	        }
-	        this.userArray = [];
-	        return res;
-	      }
-	      return false;
 	    }
 	  }, {
 	    key: "compare",
@@ -21915,6 +21942,65 @@
 		}
 	}());
 
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Level = function (_React$Component) {
+	  _inherits(Level, _React$Component);
+	
+	  function Level(props) {
+	    _classCallCheck(this, Level);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Level).call(this, props));
+	
+	    _this.state = { level: props.level };
+	    return _this;
+	  }
+	
+	  _createClass(Level, [{
+	    key: "componentWillReceiveProps",
+	    value: function componentWillReceiveProps(newProps) {
+	      this.setState({ level: newProps.level });
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "btn" },
+	        "Level: ",
+	        this.state.level
+	      );
+	    }
+	  }]);
+	
+	  return Level;
+	}(_react2.default.Component);
+	
+	exports.default = Level;
+	;
 
 /***/ }
 /******/ ]);
