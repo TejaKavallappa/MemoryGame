@@ -1,5 +1,33 @@
+html, head, body, header,
+h1, h2, a, p {
+  margin: 0;
+  padding: 0;
+  border: 1px solid black;
+  outline: 0;
+  font: 32px;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  vertical-align: inherit;
+  box-sizing: inherit;
+  background: transparent; }
+
 body {
-  font: 100% Helvetica, sans-serif; }
+  font: 100% Helvetica, sans-serif;
+  background-color: black; }
+
+header {
+  padding: 2px 15px;
+  display: flex;
+  justify-content: space-between;
+  background-color: darkgrey;
+  width: 97%;
+  margin-bottom: 20px;
+  color: white; }
+
+h1, h2 {
+  font-size: 1.5em;
+  padding: 5px; }
 
 .game {
   display: flex;
@@ -13,18 +41,16 @@ body {
   justify-content: center;
   align-items: stretch;
   flex-wrap: wrap;
-  background-color: gainsboro;
+  background-color: black;
   margin: 0 auto;
   border-radius: 5px; }
 
 .dashboard {
   display: flex;
   justify-content: space-between;
-  width: 50%;
-  padding: 20px; }
-
-li {
-  list-style: none; }
+  width: 40%;
+  padding: 20px;
+  font-size: 2em; }
 
 .tile-div {
   height: 200px;
@@ -47,5 +73,28 @@ li {
 
 .ON {
   transform: translate(-10px, -15px); }
+
+.score {
+  padding: 8px 15px;
+  background-color: orange;
+  line-height: 1.2;
+  font-size: inherit; }
+  .score:hover {
+    cursor: default; }
+
+button {
+  display: inline-block;
+  margin: 0 10px 0 0;
+  padding: 0px 30px;
+  font-size: inherit;
+  line-height: 1.2;
+  appearance: none;
+  box-shadow: none;
+  border-radius: 0; }
+  button:hover {
+    cursor: pointer; }
+
+button:focus {
+  outline: none; }
 
 /*# sourceMappingURL=style.css.map */

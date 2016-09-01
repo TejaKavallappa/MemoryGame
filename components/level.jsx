@@ -13,7 +13,7 @@ export default class Level extends React.Component {
 
   render(){
     return (
-      <div className="btn">
+      <div className="score">
         Level: {this.state.level}
       </div>
     );

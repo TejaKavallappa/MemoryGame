@@ -5,6 +5,7 @@ export default class NavBar extends React.Component {
     return(
         <header>
           <h1>Memory</h1>
+          <h2><a href="#">Github</a></h2>
         </header>
     )
   }

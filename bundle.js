@@ -21477,7 +21477,7 @@
 /* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -21507,15 +21507,24 @@
 	  }
 	
 	  _createClass(NavBar, [{
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
-	        'header',
+	        "header",
 	        null,
 	        _react2.default.createElement(
-	          'h1',
+	          "h1",
 	          null,
-	          'Memory'
+	          "Memory"
+	        ),
+	        _react2.default.createElement(
+	          "h2",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "#" },
+	            "Github"
+	          )
 	        )
 	      );
 	    }
@@ -21989,7 +21998,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "btn" },
+	        { className: "score" },
 	        "Level: ",
 	        this.state.level
 	      );
