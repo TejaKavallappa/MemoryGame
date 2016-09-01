@@ -36,7 +36,8 @@ h1, h2 {
 
 .board {
   height: 100%;
-  width: 30%;
+  width: 40%;
+  max-width: 500px;
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -48,7 +49,8 @@ h1, h2 {
 .dashboard {
   display: flex;
   justify-content: space-between;
-  width: 23%;
+  width: 33%;
+  max-width: 427px;
   padding: 20px;
   font-size: 2em; }
 
