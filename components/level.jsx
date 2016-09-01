@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export default class Level extends React.Component {
   constructor(props){
     super(props);
